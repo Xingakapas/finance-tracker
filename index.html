@@ -1,11 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>finance traker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Finance Tracker</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="app">
+    <h1>Personal Finance Tracker</h1>
     
+    <div class="container">
+      <!-- Finance Summary -->
+      <section id="finance-summary" class="finance-summary">
+        <h2>Ringkasan Keuangan</h2>
+        <div class="summary-card">
+          <h3>Total Pemasukan</h3>
+          <p class="income" id="total-income">Rp 0</p>
+        </div>
+        <div class="summary-card">
+          <h3>Total Pengeluaran</h3>
+          <p class="expense" id="total-expense">Rp 0</p>
+        </div>
+        <div class="summary-card">
+          <h3>Saldo Akhir</h3>
+          <p class="positive" id="balance">Rp 0</p>
+        </div>
+      </section>
+      
+      <!-- Transaction Form -->
+      <section class="transaction-form">
+        <h2>Tambah Transaksi Baru</h2>
+        <form id="transaction-form">
+          <div class="form-group">
+            <label for="description">Deskripsi:</label>
+            <input type="text" id="description" required>
+            <span class="error" id="description-error"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="amount">Jumlah (Rp):</label>
+            <input type="number" id="amount" min="1" required>
+            <span class="error" id="amount-error"></span>
+          </div>
+          
+          <div class="form-group">
+            <label>Jenis Transaksi:</label>
+            <div class="radio-group">
+              <label>
+                <input type="radio" name="type" value="income" required>
+                Pemasukan
+              </label>
+              <label>
+                <input type="radio" name="type" value="expense">
+                Pengeluaran
+              </label>
+            </div>
+            <span class="error" id="type-error"></span>
+          </div>
+          
+          <button type="submit" class="submit-btn">
+            Tambah Transaksi
+          </button>
+        </form>
+      </section>
+      
+      <!-- Transaction List -->
+      <section class="transaction-list">
+        <h2>Daftar Transaksi</h2>
+        <ul id="transaction-list">
+          <!-- Transaksi akan muncul di sini -->
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
-</html>`
+</html>
