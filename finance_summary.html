@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Summary</title>
+  <style>
+    .finance-summary {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .summary-card {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+    .income { color: green; }
+    .expense { color: red; }
+    .positive { color: green; }
+    .negative { color: red; }
+  </style>
+</head>
+<body>
+  <div class="finance-summary">
+    <h2>Ringkasan Keuangan</h2>
+    <div class="summary-card">
+      <h3>Total Pemasukan</h3>
+      <p class="income" id="total-income">Rp 0</p>
+    </div>
+    <div class="summary-card">
+      <h3>Total Pengeluaran</h3>
+      <p class="expense" id="total-expense">Rp 0</p>
+    </div>
+    <div class="summary-card">
+      <h3>Saldo Akhir</h3>
+      <p class="positive" id="balance">Rp 0</p>
+    </div>
+  </div>
+
+  <script>
+    // Data transaksi contoh
+    const transactions = [
+      { id: 1, description: "Gaji", amount: 5000000, type: "income" },
+      { id: 2, description: "Belanja", amount: 750000, type: "expense" }
+    ];
+
+    // Fungsi menghitung summary
+    function calculateSummary() {
+      const totalIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+      
+      const totalExpense = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+      
+      const balance = totalIncome - totalExpense;
+
+      // Format ke Rupiah
+      const formatRupiah = (amount) => {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR'
+        }).format(amount);
+      };
+
+      // Update DOM
+      document.getElementById('total-income').textContent = formatRupiah(totalIncome);
+      document.getElementById('total-expense').textContent = formatRupiah(totalExpense);
+      document.getElementById('balance').textContent = formatRupiah(balance);
+      
+      // Update class untuk saldo
+      const balanceElement = document.getElementById('balance');
+      balanceElement.className = balance >= 0 ? 'positive' : 'negative';
+    }
+
+    // Jalankan saat halaman dimuat
+    window.onload = calculateSummary;
+  </script>
+</body>
+</html>
