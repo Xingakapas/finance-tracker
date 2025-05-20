@@ -1,45 +1,22 @@
-// FinanceSummary.js
 import React from 'react';
 
 const FinanceSummary = ({ transactions }) => {
-  // Hitung total pemasukan
-  const totalIncome = transactions
-    .filter(transaction => transaction.type === 'income')
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+  const income = transactions
+    .filter(t => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
 
-  // Hitung total pengeluaran
-  const totalExpense = transactions
-    .filter(transaction => transaction.type === 'expense')
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+  const expense = transactions
+    .filter(t => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
 
-  // Hitung saldo akhir
-  const balance = totalIncome - totalExpense;
-
-  // Format ke Rupiah
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR'
-    }).format(amount);
-  };
+  const balance = income - expense;
 
   return (
-    <div className="finance-summary">
-      <h2>Ringkasan Keuangan</h2>
-      <div className="summary-card">
-        <h3>Total Pemasukan</h3>
-        <p className="income">{formatCurrency(totalIncome)}</p>
-      </div>
-      <div className="summary-card">
-        <h3>Total Pengeluaran</h3>
-        <p className="expense">{formatCurrency(totalExpense)}</p>
-      </div>
-      <div className="summary-card">
-        <h3>Saldo Akhir</h3>
-        <p className={balance >= 0 ? 'positive' : 'negative'}>
-          {formatCurrency(balance)}
-        </p>
-      </div>
+    <div>
+      <h2>Ringkasan</h2>
+      <p>Pemasukan: Rp{income.toLocaleString('id-ID')}</p>
+      <p>Pengeluaran: Rp{expense.toLocaleString('id-ID')}</p>
+      <p>Saldo: Rp{balance.toLocaleString('id-ID')}</p>
     </div>
   );
 };

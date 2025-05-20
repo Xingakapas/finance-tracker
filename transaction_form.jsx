@@ -1,101 +1,99 @@
-// TransactionForm.js
 import React, { useState } from 'react';
 
 const TransactionForm = ({ onAddTransaction }) => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [type, setType] = useState('');
+  const [formData, setFormData] = useState({
+    description: '',
+    amount: '',
+    type: ''
+  });
   const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validasi form
+    // Validasi
     const newErrors = {};
-    if (!description.trim()) newErrors.description = 'Deskripsi tidak boleh kosong';
-    if (!amount || Number(amount) <= 0) newErrors.amount = 'Jumlah harus lebih dari 0';
-    if (!type) newErrors.type = 'Pilih jenis transaksi';
+    if (!formData.description.trim()) newErrors.description = 'Deskripsi wajib diisi';
+    if (!formData.amount || Number(formData.amount) <= 0) newErrors.amount = 'Jumlah harus > 0';
+    if (!formData.type) newErrors.type = 'Pilih jenis transaksi';
     
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
-    // Buat transaksi baru
-    const newTransaction = {
+
+    // Kirim data ke parent
+    onAddTransaction({
       id: Date.now(),
-      description,
-      amount: Number(amount),
-      type,
+      ...formData,
+      amount: Number(formData.amount),
       date: new Date().toISOString()
-    };
-    
-    // Panggil callback dari parent
-    onAddTransaction(newTransaction);
-    
+    });
+
     // Reset form
-    setDescription('');
-    setAmount('');
-    setType('');
+    setFormData({ description: '', amount: '', type: '' });
     setErrors({});
   };
 
   return (
-    <div className="transaction-form">
-      <h2>Tambah Transaksi Baru</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Deskripsi:</label>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Deskripsi:</label>
+        <input
+          type="text"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+        {errors.description && <span>{errors.description}</span>}
+      </div>
+
+      <div>
+        <label>Jumlah (Rp):</label>
+        <input
+          type="number"
+          name="amount"
+          value={formData.amount}
+          onChange={handleChange}
+        />
+        {errors.amount && <span>{errors.amount}</span>}
+      </div>
+
+      <div>
+        <label>Jenis:</label>
+        <label>
           <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            type="radio"
+            name="type"
+            value="income"
+            checked={formData.type === 'income'}
+            onChange={handleChange}
           />
-          {errors.description && <span className="error">{errors.description}</span>}
-        </div>
-        
-        <div className="form-group">
-          <label>Jumlah (Rp):</label>
+          Pemasukan
+        </label>
+        <label>
           <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            type="radio"
+            name="type"
+            value="expense"
+            checked={formData.type === 'expense'}
+            onChange={handleChange}
           />
-          {errors.amount && <span className="error">{errors.amount}</span>}
-        </div>
-        
-        <div className="form-group">
-          <label>Jenis Transaksi:</label>
-          <div className="radio-group">
-            <label>
-              <input
-                type="radio"
-                name="type"
-                value="income"
-                checked={type === 'income'}
-                onChange={() => setType('income')}
-              />
-              Pemasukan
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="type"
-                value="expense"
-                checked={type === 'expense'}
-                onChange={() => setType('expense')}
-              />
-              Pengeluaran
-            </label>
-          </div>
-          {errors.type && <span className="error">{errors.type}</span>}
-        </div>
-        
-        <button type="submit" className="submit-btn">
-          Tambah Transaksi
-        </button>
-      </form>
-    </div>
+          Pengeluaran
+        </label>
+        {errors.type && <span>{errors.type}</span>}
+      </div>
+
+      <button type="submit">Tambah</button>
+    </form>
   );
 };
 
